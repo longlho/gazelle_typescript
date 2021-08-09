@@ -1,0 +1,50 @@
+# Add rules here to build your software
+# See https://docs.bazel.build/versions/master/build-ref.html#BUILD_files
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
+load(
+    "@bazel_gazelle//:def.bzl",
+    "gazelle",
+    "gazelle_binary",
+)
+
+gazelle_binary(
+    name = "gazelle_binary",
+    languages = [":gazelle_typescript_lib"],
+)
+
+# gazelle:prefix github.com/longlho/gazelle_typescript
+gazelle(
+    name = "gazelle",
+)
+
+# gazelle:prefix github.com/longlho/gazelle_typescript
+gazelle(
+    name = "gazelle_ts",
+    extra_args = [
+        "-lang",
+        "gazelle_typescript",
+        "stackage",
+    ],
+    gazelle = ":gazelle_binary",
+)
+
+go_library(
+    name = "gazelle_typescript_lib",
+    srcs = ["typescript.go"],
+    importpath = "github.com/longlho/gazelle_typescript/typescript",
+    visibility = ["//visibility:private"],
+    deps = [
+        "@bazel_gazelle//config:go_default_library",
+        "@bazel_gazelle//label:go_default_library",
+        "@bazel_gazelle//language:go_default_library",
+        "@bazel_gazelle//repo:go_default_library",
+        "@bazel_gazelle//resolve:go_default_library",
+        "@bazel_gazelle//rule:go_default_library",
+    ],
+)
+
+go_binary(
+    name = "gazelle_typescript",
+    embed = [":gazelle_typescript_lib"],
+    visibility = ["//visibility:public"],
+)

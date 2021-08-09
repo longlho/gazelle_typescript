@@ -1,0 +1,8 @@
+load("@build_bazel_rules_nodejs//:index.bzl", "ts_project")
+
+# Currently there are no targets in this Bazel package
+
+ts_project(
+    name = "ts_project",
+    deps = [],
+)
